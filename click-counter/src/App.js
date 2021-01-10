@@ -4,6 +4,21 @@ import './App.css';
 
 function App() {
   const [count, setCount] = React.useState(0);
+  const [showError, setShowError] = React.useState(false)
+
+  const increment = () => { 
+    setCount(count + 1)
+    setShowError(false)
+  }
+
+  const decrement = () => { 
+    if (count > 0) {
+      setCount(count - 1)
+      setShowError(false)
+    } else {
+      setShowError(true)
+    }
+  }
 
   return (
     <div data-test="component-app" className="App">
@@ -17,6 +32,19 @@ function App() {
       >
         Increment counter
       </button>
+      <button
+        data-test="decrement-button"
+        onClick={decrement}
+      >
+        Decrement counter
+      </button>
+
+      {showError && (
+        <p className="error-msg" data-test="error-msg">
+          Error: Counter can't go below 0
+        </p>
+      )}
+      
     </div>
   );
 }

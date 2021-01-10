@@ -61,3 +61,58 @@ test('counter increments when increment button is clicked', () => {
   const count = findByTestAttr(wrapper, 'count').text();
   expect(count).toBe("1");
 });
+
+test ('renders decrement button', () => {
+  const wrapper = setup();
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  expect(button.length).toBe(1)
+})
+
+test ('counter decrements when decrement button is clicked', () => {
+  const wrapper = setup()
+
+  const incButton = findByTestAttr(wrapper, 'increment-button')
+  incButton.simulate('click')
+
+  const decButton = findByTestAttr(wrapper, 'decrement-button')
+  decButton.simulate('click')
+
+  const count = findByTestAttr(wrapper, 'count').text()
+
+  expect(count).toBe('0')
+})
+
+test ('counter never gets below 0', () => {
+  const wrapper = setup()
+
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  button.simulate('click')
+
+  const count = parseInt(findByTestAttr(wrapper, 'count').text())
+  expect(count).toBeGreaterThan(-1)
+})
+
+test ('error message is displayed if trying to go below 0' , () => {
+  const wrapper = setup()
+
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  button.simulate('click', {
+    target : {
+      value : '0'
+    }
+  })
+
+  const errorMsg = findByTestAttr(wrapper, 'error-msg')
+  expect(errorMsg.length).toBe(1)
+
+})
+
+test ('error message is removed if increment is clicked', () => {
+  const wrapper = setup()
+
+  const button = findByTestAttr(wrapper, 'increment-button')
+  button.simulate('click')
+
+  const errorMsg = findByTestAttr(wrapper, 'error-msg')
+  expect(errorMsg.length).toBe(0)
+})
